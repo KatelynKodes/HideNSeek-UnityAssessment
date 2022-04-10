@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Hider
   - Bomb
+  - GameManager
   layers:
   - Default
   - TransparentFX
