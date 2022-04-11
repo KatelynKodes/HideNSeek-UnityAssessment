@@ -7,25 +7,25 @@ public class HiderBehavior : MovementBehavior
 
     [SerializeField]
     private Transform _moveTarget;
-    [SerializeField]
-    private float _hideDelayTime = 5.0f;
-    [SerializeField]
-    private float _speed = 5.0f;
+    private float _moveTime = 0.0f;
+    private float _moveTimer = 1.0f;
 
     //Positions
-    Vector3 _currentPos;
     Vector3 _startingPos;
-    Vector3 _moveDir;
+    Vector3 _targetPos;
 
     private GameManager _gameManager;
-    private float _timer = 0.0f;
-    private bool _isHidden = true;
+    private bool _isHidden;
+    private bool _canMove = false;
+
+    public bool IsHidden { get { return _isHidden; } set { _isHidden = value; } }
+    public bool CanMove { get { return _canMove; } set { _canMove = value; } }
 
     private void Awake()
     {
         _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        _currentPos = transform.position;
         _startingPos = transform.position;
+        _targetPos = _moveTarget.position;
     }
 
     /// <summary>
@@ -36,29 +36,37 @@ public class HiderBehavior : MovementBehavior
         _gameManager.Score++;
     }
 
+    /// <summary>
+    /// Moves the position of the hider
+    /// </summary>
+    /// <param name="startPos"> the starting position </param>
+    /// <param name="endPos"> the ending position </param>
+    /// <param name="time"> the amount of time the joruney takes </param>
+    public void MovePosition(Vector3 startPos, Vector3 endPos, float time)
+    {
+        transform.position = Vector3.Lerp(startPos, endPos, time);
+    }
+
     public override void Update()
     {
-        if (_timer >= _hideDelayTime)
+        if (CanMove)
         {
-            if (_isHidden)
+            if (IsHidden)
             {
-                _moveDir = _moveTarget.position;
-                GetVelocity(_currentPos, _moveDir, _speed);
-                base.Update();
-                _currentPos = _moveTarget.position;
-                _isHidden = false;
-                _timer = 0.0f;
+                MovePosition(_startingPos, _targetPos, _moveTime);
             }
             else
             {
-                GetVelocity(_currentPos, _startingPos, _speed);
-                base.Update();
-                _currentPos = _startingPos;
-                _isHidden = true;
-                _timer = 0.0f;
+                MovePosition(_targetPos, _startingPos, _moveTime);
+            }
+
+            _moveTime += Time.deltaTime;
+
+            if (_moveTime >= _moveTimer)
+            {
+                CanMove = false;
+                _moveTime = 0.0f;
             }
         }
-
-        _timer += Time.deltaTime;
     }
 }
