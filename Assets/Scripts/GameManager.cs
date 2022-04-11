@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     private int _lives = 4;
     private bool _gameOver = false;
     private float _timer = 0.0f;
+    [SerializeField]
     private float _roundTime = 5.0f;
 
     //Refrences to the hiders and bombers
