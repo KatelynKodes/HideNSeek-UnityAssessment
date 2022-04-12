@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
     public int Score { get{ return _score; } set { _score = value; } }
     public int Lives { get { return _lives; } set { _lives = value; } }
 
+    public bool GameOver { get { return _gameOver; } set { _gameOver = value; } }
+
     private void Awake()
     {
         _hiders = GameObject.FindGameObjectsWithTag("Hider");
@@ -42,14 +44,26 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if (_timer >= _roundTime)
-            {
-                _hiders[0].GetComponent<HiderBehavior>().CanMove = true;
-                _timer = 0.0f;
-            }
             _scoreText.text = "Score: " + Score;
             _livesText.text = "Lives: " + Lives;
+
+            if (_timer >= _roundTime)
+            {
+                int randomHider = Random.Range(0, _hiders.Length);
+                int randomBomb = Random.Range(0, _hiders.Length);
+
+                //Select a random hider and bomb, set their CanMove to true
+                _hiders[randomHider].GetComponent<HiderBehavior>().CanMove = true;
+                _bombers[randomBomb].GetComponent<BombBehavior>().CanMove = true;
+
+                _timer = 0.0f;
+            }
             _timer += Time.deltaTime;
+
+            if (Lives == 0)
+            {
+                GameOver = true;
+            }
         }
     }
 
