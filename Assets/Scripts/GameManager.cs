@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour
@@ -80,7 +81,11 @@ public class GameManager : MonoBehaviour
     /// Restarts the game
     /// </summary>
     public void RestartGame()
-    { 
+    {
+        Score = 0;
+        Lives = 4;
+        GameOver = false;
 
+        SceneManager.LoadScene("SampleScene");
     }
 }

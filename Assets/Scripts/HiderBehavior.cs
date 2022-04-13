@@ -9,18 +9,15 @@ public class HiderBehavior : MovementBehavior
     /// </summary>
     private void OnMouseDown()
     {
-        Manager.Score++; 
+        Manager.Score++;
+        CanMove = true;
     }
 
     public override void Update()
     {
         if (CanMove && SharesPosition)
         {
-            if (PositionPartner.RoundPosition(transform.position) == RoundPosition(MoveTarget.position))
-            {
-                CanMove = false;
-            }
-            else if (PositionPartner.CanMove == true)
+            if (PositionPartner.IsHidden|| PositionPartner.CanMove)
             {
                 CanMove = false;
             }

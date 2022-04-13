@@ -16,11 +16,7 @@ public class BombBehavior : MovementBehavior
     {
         if (CanMove == true && SharesPosition)
         {
-            if (PositionPartner.RoundPosition(transform.position) == RoundPosition(MoveTarget.position))
-            {
-                PositionPartner.CanMove = true;
-            }
-            else if (PositionPartner.CanMove == true)
+            if (!PositionPartner.IsHidden || PositionPartner.CanMove)
             {
                 CanMove = false;
             }
